@@ -1,7 +1,7 @@
-import React from "react";
+import React, {SFC} from "react";
 import PreloaderImg from '../assets/preloading.png';
 
-const Preloader = () => (
+const Preloader: SFC = () => (
   <div className="App container">
     <h1>The average H1B Visa pays $86,000 per year</h1>
     <p className="lead">Since 2012, the US tech industry has sponsored X tech visas.
