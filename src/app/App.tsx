@@ -4,20 +4,26 @@ import Preloader from "../components/Preloader";
 import "./App.css";
 import logo from './logo.svg';
 
+interface IState {
+  techSalaries: string[];
+}
+
+const AppBody = () => (
+  <div className="App">
+    "Foobar"
+  </div>
+)
+
 class App extends React.Component {
+  public state: IState = {
+    techSalaries: []
+  }
+
   public render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to Reaction</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <Preloader/>
-      </div>
-    );
+    const isDataLoaded = this.state.techSalaries.length > 1;
+    return isDataLoaded ? 
+            <Preloader/> : 
+            <AppBody/> ;
   }
 }
 
