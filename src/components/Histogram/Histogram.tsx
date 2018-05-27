@@ -1,6 +1,8 @@
 import d3 from "d3"; // TODO: Modularize D3 imports
 import React, { Component } from "react";
 
+import HistogramBar from './Bar';
+
 interface IProps {
   readonly bins: number;
   readonly value: () => number; // accessor function
@@ -32,7 +34,34 @@ class Histogram extends Component<IProps, any> {
   }
 
   public render() {
-    return null;
+    const translate = `translate(${this.props.x},${this.props.y})`;
+    const bars = this.histogram(this.props.data); // note this is duped in updateD3?
+
+
+    return (
+      <g className="histogram" transform={translate}>
+        <g className="bars">
+          {bars.map(this.makeBar)}
+        </g>
+      </g>
+    );
+  }
+
+  private makeBar = (bar: d3.Bin<number, number>) => {
+    const percent = bar.length / this.props.data.length * 100;
+
+    const props = {
+      // tslint:disable:object-literal-sort-keys
+      x: this.props.axisMargin,
+      y: this.yScale(bar.x0),
+      width: this.widthScale(bar.length),
+      height: this.yScale(bar.x1 - bar.x0),
+      key: `histogram-bar-${bar.x0}`,
+      percent
+      // tslint:enable:object-literal-sort-keys
+    }
+
+    return <HistogramBar {...props}/>
   }
 
   private updateD3(props: IProps) {
@@ -44,7 +73,7 @@ class Histogram extends Component<IProps, any> {
 
     const xRangeMax = props.width - props.axisMargin;
     this.widthScale
-      .domain(d3.extent(counts) as number[])
+      .domain(d3.extent(counts) as number[]) // Note: we don't floor this to 0?
       .range([0, xRangeMax]);
 
     const yDomainMax = d3.max(bars, d => d.x1) as number;
