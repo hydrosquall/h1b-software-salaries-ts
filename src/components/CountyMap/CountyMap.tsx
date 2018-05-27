@@ -6,7 +6,6 @@ import * as topojson from "topojson";
 import { ICountyValue } from '../../interfaces';
 import County from "./County";
 
-
 interface IProps { // Reflect: better than React proptypes?
   readonly width: number;
   readonly height: number;
@@ -52,10 +51,41 @@ class CountyMap extends Component<IProps, State> {
     if (!this.props.usTopoJson) {
       return null;
     } else {
-
       const us = this.props.usTopoJson;
       const statesMesh = topojson.mesh(us, us.objects.states, (a, b) => a !== b);
-      return <div>hello</div>;
+      const counties = topojson.feature(us, us.objects.counties).features;
+      const countyValueMap = _.fromPairs(
+        this.props.countyValues
+          .map((d: ICountyValue) => [d.countyID, d.value])
+      );
+
+      const borderStyle = {
+        fill: 'none',
+        stroke: '#fff',
+        strokeLinejoin: 'round'
+      };
+
+      return (
+      <g transform={`translate(${this.props.x}, ${this.props.y})`}>
+        {counties.map((feature) => (
+          <County geoPath={this.geoPath}
+                  key={feature.id}
+                  feature={feature}
+                  zoom={this.props.zoom}
+                  quantize={this.quantize}
+                  value={countyValueMap[feature.id as string]}
+          />
+        ))}
+        {/* State Borders*/}
+        <path d={this.geoPath(statesMesh) as string}
+              style={{
+                fill: 'none',
+                stroke: '#fff',
+                strokeLinejoin: 'round'
+              }}
+        />
+        </g>
+      );
     }
   }
 
