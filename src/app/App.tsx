@@ -19,6 +19,9 @@ interface IState {
   usTopoJson: topojson.UsAtlas | null,
 };
 
+// TODO: Pull utils into a general shared file
+const valueAccessor = (d: ISalary) => d.base_salary;
+
 class App extends Component<any, IState> {
   public state: IState = {
     USstateNames: [],
@@ -60,7 +63,7 @@ class App extends Component<any, IState> {
       bottomMargin: 5,
       data: filteredSalaries,
       height: 500,
-      value: (d: ISalary) => d.base_salary, // fix
+      valueAccessor, // function to access a property in "data"
       width: 500,
       x: 500,
       y: 10,
@@ -74,7 +77,7 @@ class App extends Component<any, IState> {
     );
   }
   /**
-   * Calculate array of of CountyValues for a given list of CountyNames
+   * Calculate array of of CountyAccessors for a given list of CountyNames
    */
   private getCountyValues = (countyNames: ICountyName[], salariesMap: object): ICountyValue[] => {
     return (countyNames
@@ -92,7 +95,7 @@ class App extends Component<any, IState> {
     if (!medianHousehold || !salaries) {
       return null;
     }
-    const medianSalary = d3.median(salaries, (d: any) => d.base_salary) || 0; // protect against undefined
+    const medianSalary = d3.median(salaries, valueAccessor) || 0; // protect against undefined
     return {
       countyID: county.id,
       value: medianSalary - medianHousehold.medianIncome

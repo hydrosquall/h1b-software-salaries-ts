@@ -6,7 +6,7 @@ import HistogramBar from './Bar';
 
 interface IProps {
   readonly bins: number;
-  readonly value: (d: ISalary) => number; // accessor function
+  readonly valueAccessor: (d: ISalary) => number; // accessor function
   readonly data: ISalary[];
   readonly width: number;
   readonly height: number;
@@ -68,7 +68,7 @@ class Histogram extends Component<IProps, any> {
   private updateD3(props: IProps) {
     this.histogram
       .thresholds(props.bins)
-      .value(props.value);
+      .value(props.valueAccessor);
     const bars = this.histogram(props.data);
     const counts = bars.map(d => d.length);
 
