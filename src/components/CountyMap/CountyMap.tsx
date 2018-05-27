@@ -6,11 +6,12 @@ import * as topojson from "topojson";
 import { ICountyValue } from '../../interfaces';
 import County from "./County";
 
+
 interface IProps { // Reflect: better than React proptypes?
   readonly width: number;
   readonly height: number;
   readonly countyValues: ICountyValue[];
-  readonly usTopoJson: object;
+  readonly usTopoJson: topojson.UsAtlas | null;
   readonly x: number;
   readonly y: number;
   readonly zoom: object | null;
@@ -51,6 +52,9 @@ class CountyMap extends Component<IProps, State> {
     if (!this.props.usTopoJson) {
       return null;
     } else {
+
+      const us = this.props.usTopoJson;
+      const statesMesh = topojson.mesh(us, us.objects.states, (a, b) => a !== b);
       return <div>hello</div>;
     }
   }

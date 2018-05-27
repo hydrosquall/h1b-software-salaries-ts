@@ -1,12 +1,13 @@
 import * as d3 from "d3";
 import _ from "lodash";
 import  React, { Component } from "react";
+import * as topojson from "topojson";
+
 import CountyMap from "../components/CountyMap";
 import Preloader from "../components/Preloader";
-import { loadAllData } from "./DataHandling";
-
 import { ICountyName, ICountyValue }from '../interfaces';
 import "./App.css";
+import { loadAllData } from "./DataHandling";
 import logo from "./logo.svg";
 
 interface IState {
@@ -14,7 +15,7 @@ interface IState {
   techSalaries: string[];
   countyNames: ICountyName[]; // name, id
   USstateNames: object[],
-  usTopoJson: object,
+  usTopoJson: topojson.UsAtlas | null,
 };
 
 class App extends Component<any, IState> {
@@ -23,7 +24,7 @@ class App extends Component<any, IState> {
     countyNames: [],
     medianIncomes: {},
     techSalaries: [],
-    usTopoJson: {}
+    usTopoJson: null
   };
 
   public componentWillMount() {
