@@ -38,7 +38,7 @@ class Histogram extends Component<IProps, any> {
 
   public render() {
     const translate = `translate(${this.props.x},${this.props.y})`;
-    const bars = this.histogram(this.props.data); // note this is duped in updateD3?
+    const bars = this.histogram(this.props.data); // note this is duplicated in updateD3
 
     return (
       <g className="histogram" transform={translate}>
@@ -50,7 +50,6 @@ class Histogram extends Component<IProps, any> {
           y={0}
           scale={this.yScale}
           data={bars}
-          
         />
       </g>
     );
