@@ -22,20 +22,22 @@ const HistogramBar: SFC<IProps> = ({ x, y, percent, width, height }) => {
     label = ""
   }
 
+  // TODO: investigate these magic numbers
   const rectProps = {
     height: height - 2,
     transform: "translate(0,1)",
     width
   }
   const textProps = {
-    textAnchor: "end", // move to css
     x: width - 5,
     y: height / 2 + 3
   }
   return (
     <g transform={translate} className="bar">
       <rect {...rectProps} />
-      <text {...textProps} />
+      <text {...textProps}>
+        {label}
+      </text>
     </g>)
 
 };

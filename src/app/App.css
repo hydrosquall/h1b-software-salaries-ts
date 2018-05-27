@@ -1,28 +1,34 @@
-.App {
-  text-align: center;
+/* TODO: Investigate .styl files to avoid polluting global style-space */
+
+/*Chart styles */
+.histogram .bar rect {
+  fill: rgb(69, 194, 183);
+  shape-rendering: crispEdges;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.histogram .bar text {
+  fill: #fff;
+  font: 12px sans-serif;
+  text-anchor: end;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+button {
+  margin-right: .5em;
+  margin-bottom: .3em;
 }
 
-.App-title {
-  font-size: 1.5em;
+/* Chart Annotations */
+.row {
+  margin-top: 1em;
 }
 
-.App-intro {
-  font-size: large;
+.mean text {
+  font: 11px sans-serif;
+  fill: grey;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.mean path {
+  stroke-dasharray: 3;
+  stroke: grey;
+  stroke-width: 1px;
 }
