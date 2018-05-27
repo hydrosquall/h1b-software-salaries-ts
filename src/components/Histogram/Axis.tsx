@@ -17,7 +17,6 @@ class Axis extends Component<IProps> {
     super(props);
     this.myRef = React.createRef();
   }
-
   public componentDidMount() {
     this.renderAxis();
   }
@@ -26,11 +25,11 @@ class Axis extends Component<IProps> {
   }
   public renderAxis() {
     const axis = d3.axisLeft(this.props.scale);
-    d3.select(this.refs.g as any).call(axis);
+    d3.select(this.myRef.current).call(axis);
   }
   public render() {
-    // tslint:disable-next-line:jsx-no-string-ref
-    return <g transform="translate(10, 30)" ref="g" />;
+    const translate = `translate(${this.props.x}, ${this.props.y})`;
+    return <g transform={translate} ref={this.myRef} />;
   }
 }
 

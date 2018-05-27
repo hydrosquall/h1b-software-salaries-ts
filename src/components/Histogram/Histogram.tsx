@@ -40,10 +40,20 @@ class Histogram extends Component<IProps, any> {
     const translate = `translate(${this.props.x},${this.props.y})`;
     const bars = this.histogram(this.props.data); // note this is duped in updateD3?
 
-    return <g className="histogram" transform={translate}>
-        <g className="bars">{bars.map(this.makeBar)}</g>
-        <Axis x={this.props.axisMargin - 3} y={0} scale={this.yScale} data={bars} />
-      </g>;
+    return (
+      <g className="histogram" transform={translate}>
+        <g className="bars">
+          {bars.map(this.makeBar)}
+        </g>
+        <Axis
+          x={this.props.axisMargin - 3}
+          y={0}
+          scale={this.yScale}
+          data={bars}
+          
+        />
+      </g>
+    );
   }
 
   private makeBar = (bar: d3.Bin<ISalary, number>) => {
