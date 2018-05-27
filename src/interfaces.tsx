@@ -9,4 +9,8 @@ interface ICountyName {
   readonly name: string;
 };
 
-export { ICountyValue, ICountyName };
+interface ISalary {
+  readonly base_salary: number;
+}
+
+export { ICountyValue, ICountyName, ISalary };

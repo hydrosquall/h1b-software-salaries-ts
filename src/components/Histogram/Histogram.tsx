@@ -1,12 +1,13 @@
-import d3 from "d3"; // TODO: Modularize D3 imports
+import * as d3 from "d3"; // TODO: Modularize D3 imports
 import React, { Component } from "react";
 
+import { ISalary } from "../../interfaces";
 import HistogramBar from './Bar';
 
 interface IProps {
   readonly bins: number;
-  readonly value: () => number; // accessor function
-  readonly data: number[];
+  readonly value: (d: ISalary) => number; // accessor function
+  readonly data: ISalary[];
   readonly width: number;
   readonly height: number;
   readonly axisMargin: number;
@@ -16,13 +17,14 @@ interface IProps {
 }
 
 class Histogram extends Component<IProps, any> {
-  private histogram: d3.HistogramGenerator<number, number>;
+  private histogram: d3.HistogramGenerator<ISalary, number>;
   private widthScale: d3.ScaleLinear<number, number>;
   private yScale: d3.ScaleLinear<number, number>;
 
   constructor(props: IProps) {
     super(props);
-    this.histogram = d3.histogram();
+    // TODO: figure out how to get compiler to let first argument by ISalary instead of "any". 
+    this.histogram = d3.histogram() as d3.HistogramGenerator<any, number>; 
     this.widthScale = d3.scaleLinear();
     this.yScale = d3.scaleLinear();
 
@@ -37,7 +39,6 @@ class Histogram extends Component<IProps, any> {
     const translate = `translate(${this.props.x},${this.props.y})`;
     const bars = this.histogram(this.props.data); // note this is duped in updateD3?
 
-
     return (
       <g className="histogram" transform={translate}>
         <g className="bars">
@@ -47,7 +48,7 @@ class Histogram extends Component<IProps, any> {
     );
   }
 
-  private makeBar = (bar: d3.Bin<number, number>) => {
+  private makeBar = (bar: d3.Bin<ISalary, number>) => {
     const percent = bar.length / this.props.data.length * 100;
 
     const props = {

@@ -4,15 +4,16 @@ import  React, { Component } from "react";
 import * as topojson from "topojson";
 
 import CountyMap from "../components/CountyMap";
+import Histogram from "../components/Histogram";
 import Preloader from "../components/Preloader";
-import { ICountyName, ICountyValue }from '../interfaces';
+import { ICountyName, ICountyValue, ISalary }from '../interfaces';
 import "./App.css";
 import { loadAllData } from "./DataHandling";
 import logo from "./logo.svg";
 
 interface IState {
   medianIncomes: object; // Mapping from county.id to d county data
-  techSalaries: string[];
+  techSalaries: ISalary[];
   countyNames: ICountyName[]; // name, id
   USstateNames: object[],
   usTopoJson: topojson.UsAtlas | null,
@@ -52,10 +53,23 @@ class App extends Component<any, IState> {
       y: 0,
       zoom
     };
+
+    const histogramProps = {
+      axisMargin: 83,
+      bins: 10,
+      bottomMargin: 5,
+      data: filteredSalaries,
+      height: 500,
+      value: (d: ISalary) => d.base_salary, // fix
+      width: 500,
+      x: 500,
+      y: 10,
+    }
   
     return (
       <svg height="500" width="1100">
         <CountyMap {...mapProps} />
+        <Histogram {...histogramProps} />
       </svg>
     );
   }
@@ -85,6 +99,5 @@ class App extends Component<any, IState> {
     };
   }
 }
-
 
 export default App;
