@@ -1,4 +1,3 @@
-
 import * as d3 from "d3";
 import _ from "lodash";
 import React, { Component } from 'react';
@@ -90,8 +89,7 @@ class Description extends Component<IProps> {
     // bestCounty
     const dataLength = this.props.data.length;
     const bestCounty = _.maxBy(
-      _.keys(byCounty)
-        .map(county => byCounty[county])
+      _.values(byCounty)
         .filter(d => d.length / dataLength > 0.01), // Avoid outliers: county must have min 1% of dataset
       items =>
         (d3.mean(items, valueAccessor) as number) -
@@ -100,8 +98,8 @@ class Description extends Component<IProps> {
 
     const countyMedian = medians[bestCounty[0].countyID][0].medianIncome;
     const byCity = _.groupBy(bestCounty, "city");
-    const bestCity = _.maxBy(_.keys(byCity)
-        .map(cityKey => byCity[cityKey])
+    const bestCity = _.maxBy(
+      _.values(byCity)
         .filter(d => d.length / bestCounty.length > 0.01), 
         items => d3.mean(items, valueAccessor) as number
     ) as ISalary[];
