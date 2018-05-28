@@ -25,6 +25,7 @@ button {
 .mean text {
   font: 11px sans-serif;
   fill: grey;
+  text-anchor: end;
 }
 
 .mean path {

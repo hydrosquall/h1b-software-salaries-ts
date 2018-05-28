@@ -5,6 +5,7 @@ import * as topojson from "topojson";
 
 import CountyMap from "../components/CountyMap";
 import Histogram from "../components/Histogram";
+import MedianLine from "../components/MedianLine";
 import { Description, GraphDescription, Title } from "../components/Meta";
 import Preloader from "../components/Preloader";
 
@@ -15,9 +16,18 @@ import "./App.css";
 import { loadAllData } from "./DataHandling";
 import logo from "./logo.svg";
 
+interface IStateGroup {
+  US: IMedian[];
+}
+
+interface IMedian {
+  readonly medianIncome: number;
+}
+
 interface IState {
   medianIncomes: object; // Mapping from county.id to d county data
   medianIncomesByCounty: object;
+  medianIncomesByUSState: IStateGroup;
   techSalaries: ISalary[];
   countyNames: ICountyName[]; // name, id
   USstateNames: object[],
@@ -36,6 +46,7 @@ class App extends Component<any, IState> {
     },
     medianIncomes: {},
     medianIncomesByCounty: {},
+    medianIncomesByUSState: { 'US': []},
     techSalaries: [],
     usTopoJson: null
   };
@@ -55,6 +66,8 @@ class App extends Component<any, IState> {
     const countyValues = this.getCountyValues(this.state.countyNames, filteredSalariesMap);
     const zoom = null;
 
+    const medianHousehold = this.state.medianIncomesByUSState.US[0].medianIncome;
+
     const mapProps = {
       USstateNames: this.state.USstateNames,
       countyValues,
@@ -66,9 +79,7 @@ class App extends Component<any, IState> {
       zoom
     };
 
-    const histogramProps = {
-      axisMargin: 83,
-      bins: 10,
+    const histogramBaseProps = {
       bottomMargin: 5,
       data: filteredSalaries,
       height: 500,
@@ -76,6 +87,17 @@ class App extends Component<any, IState> {
       width: 500,
       x: 500,
       y: 10,
+    }
+    
+    const histogramProps = {
+      ...histogramBaseProps,
+      axisMargin: 83,
+      bins: 10,
+    }
+
+    const medianLineProps = {
+      ...histogramBaseProps,
+      median: medianHousehold,
     }
   
     return (
@@ -94,6 +116,8 @@ class App extends Component<any, IState> {
         <svg height="500" width="1100">
           <CountyMap {...mapProps} />
           <Histogram {...histogramProps} />
+          <MedianLine {...medianLineProps} />
+
         </svg>
       </div>
     );
