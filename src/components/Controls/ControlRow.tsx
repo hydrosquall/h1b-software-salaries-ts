@@ -7,7 +7,7 @@ interface IYearFilter { // Temporary because we only filter 1 thing at a time
 }
 
 interface IProps {
-  readonly capitalize: boolean;
+  readonly capitalize?: boolean;
   readonly toggleNames: string[];
   readonly picked: string;
   readonly updateDataFilter: (criteria: string, reset: boolean) => void; // diff from parent prop with same name
