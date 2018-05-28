@@ -134,6 +134,10 @@ class Description extends Component<IProps> {
     const format = this.format;
     const mean = d3.mean(this.props.data, valueAccessor) as number;
     const deviation = d3.deviation(this.props.data, valueAccessor) as number;
+    
+    if (this.props.data.length === 0 ) { // guard against bug where all data gone
+      return null;
+    }
 
     return (
       <p className="lead">

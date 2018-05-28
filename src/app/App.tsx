@@ -58,6 +58,21 @@ class App extends Component<any, IState> {
     loadAllData((data: IState) => this.setState(data));
   };
 
+  public shouldComponentUpdate(nextProps: any, nextState: IState) {
+    // Note: app crashes when a selected toggle is untoggled without this method
+    // Not 100% clear yet why this fixes it, but going to leave alone for now.
+    // I think going to redux will help.
+    const { techSalaries, filteredBy } = this.state;
+    const changedSalaries = (techSalaries && techSalaries.length)
+                            !== (nextState.techSalaries && nextState.techSalaries.length);
+    const changedFilters = Object.keys(filteredBy).some(
+      k => filteredBy[k]
+        !== nextState.filteredBy[k]
+    );
+    return changedSalaries || changedFilters;
+  }
+
+
   public render() {
     const isDataLoaded = this.state.techSalaries.length > 1;
     if (!isDataLoaded) {
@@ -107,8 +122,6 @@ class App extends Component<any, IState> {
       median: medianHousehold,
     }
   
-    const updateFilter = this.updateDataFilter.bind(this);
-
     return (
       <div className="App container">
         <Title
@@ -165,14 +178,13 @@ class App extends Component<any, IState> {
     };
   }
   private updateDataFilter = (filter: (d: any) => boolean, filteredBy: IFilter) => {
-    const oldFilter = this.state.filteredBy;
-    const newFilter = {
-      ...oldFilter,
+    const newFilteredBy = {
+      ...this.state.filteredBy, // old filter
       ...filteredBy
-    } // explicitly merge dictionaries
+    }
 
     this.setState({
-      filteredBy: newFilter,
+      filteredBy: newFilteredBy,
       salariesFilter: filter,
     });
   }
