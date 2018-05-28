@@ -11,6 +11,11 @@ interface ICountyName {
 
 interface ISalary {
   readonly base_salary: number;
+  readonly submit_date: Date;
+  readonly countyID: string;
+  readonly clean_job_title: string;
+  readonly USstate: string; // enum
+  readonly city: string;
 }
 
 // Used for interactions

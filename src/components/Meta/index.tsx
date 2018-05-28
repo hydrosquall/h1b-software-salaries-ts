@@ -1,2 +1,4 @@
 // Components for Metadata
-export { default } from './Title';
+export default {};
+export { default as Title } from './Title';
+export { default as Description } from './Description';
