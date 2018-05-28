@@ -5,7 +5,7 @@ import * as topojson from "topojson";
 
 import CountyMap from "../components/CountyMap";
 import Histogram from "../components/Histogram";
-import Title from "../components/Meta";
+import { Description, Title } from "../components/Meta";
 import Preloader from "../components/Preloader";
 
 import { ICountyName, ICountyValue, IFilter, ISalary }from '../interfaces';
@@ -17,15 +17,13 @@ import logo from "./logo.svg";
 
 interface IState {
   medianIncomes: object; // Mapping from county.id to d county data
+  medianIncomesByCounty: object;
   techSalaries: ISalary[];
   countyNames: ICountyName[]; // name, id
   USstateNames: object[],
   usTopoJson: topojson.UsAtlas | null,
   filteredBy: IFilter,
 };
-
-// TODO: Pull utils into a general shared file
-
 
 class App extends Component<any, IState> {
   public state: IState = {
@@ -37,6 +35,7 @@ class App extends Component<any, IState> {
       year: '*',
     },
     medianIncomes: {},
+    medianIncomesByCounty: {},
     techSalaries: [],
     usTopoJson: null
   };
@@ -83,6 +82,12 @@ class App extends Component<any, IState> {
       <div className="App container">
         <Title
           data={filteredSalaries}
+          filteredBy={this.state.filteredBy}
+        />
+        <Description
+          data={filteredSalaries}
+          allData={this.state.techSalaries}
+          medianIncomesByCounty={this.state.medianIncomesByCounty}
           filteredBy={this.state.filteredBy}
         />
         <svg height="500" width="1100">
