@@ -17,7 +17,7 @@ import { loadAllData } from "./DataHandling";
 import logo from "./logo.svg";
 
 interface IStateGroup {
-  US: IMedian[];
+  [key: string]: IMedian[];
 }
 
 interface IMedian {
@@ -29,6 +29,7 @@ interface IState {
   medianIncomesByCounty: object;
   medianIncomesByUSState: IStateGroup;
   techSalaries: ISalary[];
+  salariesFilter: () => boolean;
   countyNames: ICountyName[]; // name, id
   USstateNames: object[],
   usTopoJson: topojson.UsAtlas | null,
@@ -47,6 +48,7 @@ class App extends Component<any, IState> {
     medianIncomes: {},
     medianIncomesByCounty: {},
     medianIncomesByUSState: { 'US': []},
+    salariesFilter: () => true,
     techSalaries: [],
     usTopoJson: null
   };
@@ -61,12 +63,16 @@ class App extends Component<any, IState> {
       return <Preloader />;
     }
   
-    const filteredSalaries = this.state.techSalaries;
+    const filteredSalaries = this.state.techSalaries.filter(this.state.salariesFilter);
     const filteredSalariesMap = _.groupBy(filteredSalaries, "countyID");
     const countyValues = this.getCountyValues(this.state.countyNames, filteredSalariesMap);
-    const zoom = null;
+    let zoom = null;
+    let medianHousehold = this.state.medianIncomesByUSState.US[0].medianIncome;
 
-    const medianHousehold = this.state.medianIncomesByUSState.US[0].medianIncome;
+    if (this.state.filteredBy.USstate !== '*') {
+      zoom = this.state.filteredBy.USstate;
+      medianHousehold = d3.mean(this.state.medianIncomesByUSState[zoom], d => d.medianIncome) as number;
+    }
 
     const mapProps = {
       USstateNames: this.state.USstateNames,
@@ -146,6 +152,12 @@ class App extends Component<any, IState> {
       countyID: county.id,
       value: medianSalary - medianHousehold.medianIncome
     };
+  }
+  private updateDataFilter(filter: () => boolean, filteredBy: IFilter) {
+    this.setState({
+      filteredBy,
+      salariesFilter: filter,
+    });
   }
 }
 

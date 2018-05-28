@@ -20,7 +20,7 @@ const ChoroplethColors = _.reverse([
 ]);
 
 interface IProps {
-  readonly zoom: object | null;
+  readonly zoom: string | null;
   readonly value: number;
   readonly key: string | number | undefined;
   readonly geoPath: d3.GeoPath<any, GeoPermissibleObjects>;

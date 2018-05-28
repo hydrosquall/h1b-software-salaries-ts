@@ -13,7 +13,7 @@ interface IProps { // Reflect: better than React proptypes?
   readonly usTopoJson: topojson.UsAtlas | null;
   readonly x: number;
   readonly y: number;
-  readonly zoom: object | null; // bool?
+  readonly zoom: string | null; // bool?
   readonly USstateNames: object[];
 };
 
