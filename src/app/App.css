@@ -1,5 +1,15 @@
 /* TODO: Investigate .styl files to avoid polluting global style-space */
 
+.pageHead {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.lead {
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+
 /*Chart styles */
 .histogram .bar rect {
   fill: rgb(69, 194, 183);

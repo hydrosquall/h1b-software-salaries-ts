@@ -61,7 +61,11 @@ class Title extends Component<IProps> {
           {this.yearsFragment}
         </h2>
     );
-    return title;
+    return (
+      <div className="pageHead">
+        {title}
+      </div>
+    );
   }
 }
 

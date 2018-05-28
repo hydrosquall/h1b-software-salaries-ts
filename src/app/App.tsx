@@ -121,9 +121,13 @@ class App extends Component<any, IState> {
         <GraphDescription filteredBy={this.state.filteredBy} />
         <svg height="500" width="1100">
           <CountyMap {...mapProps} />
+          <rect x="500"
+                y="0"
+                width="500"
+                height="500"
+                style={{ fill: 'white' }} />
           <Histogram {...histogramProps} />
           <MedianLine {...medianLineProps} />
-
         </svg>
       </div>
     );
