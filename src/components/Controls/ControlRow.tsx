@@ -49,7 +49,7 @@ class ControlRow extends Component<IProps, IState> {
 
     // Reset: "toggle was unclicked without a new one being selected"
     this.props.updateDataFilter(picked, !newPickStatus);
-    this.setState({ toggleValues });
+    this.setState({ toggleValues: newToggleValues });
   }
 
   public render() { 
