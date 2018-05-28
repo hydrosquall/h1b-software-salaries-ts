@@ -3,6 +3,7 @@ import _ from "lodash";
 import  React, { Component } from "react";
 import * as topojson from "topojson";
 
+import Controls from "../components/Controls";
 import CountyMap from "../components/CountyMap";
 import Histogram from "../components/Histogram";
 import MedianLine from "../components/MedianLine";
@@ -29,7 +30,7 @@ interface IState {
   medianIncomesByCounty: object;
   medianIncomesByUSState: IStateGroup;
   techSalaries: ISalary[];
-  salariesFilter: () => boolean;
+  salariesFilter: (d: any) => boolean;
   countyNames: ICountyName[]; // name, id
   USstateNames: object[],
   usTopoJson: topojson.UsAtlas | null,
@@ -106,6 +107,8 @@ class App extends Component<any, IState> {
       median: medianHousehold,
     }
   
+    const updateFilter = this.updateDataFilter.bind(this);
+
     return (
       <div className="App container">
         <Title
@@ -129,6 +132,10 @@ class App extends Component<any, IState> {
           <Histogram {...histogramProps} />
           <MedianLine {...medianLineProps} />
         </svg>
+        <Controls 
+          data={this.state.techSalaries}
+          updateDataFilter={updateFilter}
+        />
       </div>
     );
   }
@@ -157,9 +164,15 @@ class App extends Component<any, IState> {
       value: medianSalary - medianHousehold.medianIncome
     };
   }
-  private updateDataFilter(filter: () => boolean, filteredBy: IFilter) {
+  private updateDataFilter (filter: (d: any) => boolean, filteredBy: IFilter) {
+    const oldFilter = this.state.filteredBy;
+    const newFilter = {
+      ...oldFilter,
+      ...filteredBy
+    } // explicitly merge dictionaries
+
     this.setState({
-      filteredBy,
+      filteredBy: newFilter,
       salariesFilter: filter,
     });
   }

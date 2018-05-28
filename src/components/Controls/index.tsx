@@ -5,7 +5,6 @@ import { ISalary } from "../../interfaces";
 import ControlRow from './ControlRow';
 
 
-
 // Extra temporary interfaces until all the metadata shows up
 interface IYearFilter { // Temporary because we only filter 1 thing at a time right now
   year: string;
@@ -16,7 +15,8 @@ interface IFilters {
 // End Extra Interfaces
 
 interface IProps {
-  updateDataFilter: (filter: (d: any) => boolean, filteredBy: IYearFilter) => void;
+  updateDataFilter: (filter: (d: any) => boolean, filteredBy: any) => void;
+  readonly data: ISalary[];
 }
 
 interface IState {
@@ -38,8 +38,22 @@ class Controls extends Component<IProps, IState> {
     return !_.isEqual(this.state, nextState);
   }
 
-  public render() { 
-    return (null);
+  public render() {
+    const {data} = this.props;
+    const years = new Set(data.map(d => `${d.submit_date.getFullYear()}`));
+    const yearFilter = this.updateYearFilter.bind(this);
+
+    return (
+      <div>
+        <ControlRow
+          // data={data}
+          toggleNames={Array.from(years.values())}
+          picked={this.state.year}
+          capitalize={false}
+          updateDataFilter={yearFilter}
+        />
+      </div>
+    );
   }
 
   private reportUpdateUpTheChain() {
@@ -57,7 +71,7 @@ class Controls extends Component<IProps, IState> {
     );
   }
 
-  private updateYearFilter(year: string, reset: boolean) {
+  private updateYearFilter (year: string, reset: boolean) {
     let filter = (d: ISalary) => d.submit_date.getFullYear() === +year;
 
     if (reset || !year) {

@@ -53,16 +53,17 @@ class ControlRow extends Component<IProps, IState> {
   }
 
   public render() { 
+    const addToggle = this.addToggle.bind(this);
     return (
       <div className="row">
         <div className="col-md-12">
-          {this.props.toggleNames.map(this._addToggle)}
+          {this.props.toggleNames.map(addToggle)}
         </div>
       </div>
     )
   }
 
-  private _addToggle(name: string) {
+  private addToggle (name: string) {
     const key = `toggle-${name}`;
     const label = (this.props.capitalize) ? name.toUpperCase() : name;
     const toggleProps = {
