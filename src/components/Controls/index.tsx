@@ -8,14 +8,11 @@ type filterFunctionType = (d: ISalary) => boolean;
 
 // Extra temporary interfaces until all the metadata shows up
 interface IFilterParams {
-  jobTitle: string;
-  year: string;
+  readonly jobTitle: string;
+  readonly year: string;
+  readonly USstate: string;
 }
-interface IFilters {
-  yearFilter: filterFunctionType;
-  jobTitleFilter: filterFunctionType;
-}
-// End Extra Interfaces
+//
 
 interface IProps {
   updateDataFilter: (filter: filterFunctionType, filteredBy: IFilterParams) => void;
@@ -64,7 +61,13 @@ class Controls extends Component<IProps, IState> {
         <ControlRow
           toggleNames={Array.from(jobTitles.values())}
           picked={this.state.jobTitle}
-          updateDataFilter={this.updateJobTitleFilter} />
+          updateDataFilter={this.updateJobTitleFilter}
+          />
+        <ControlRow
+          toggleNames={Array.from(USstates.values())}
+          picked={this.state.USstate}
+          updateDataFilter={this.updateUSstateFilter} 
+          capitalize={true} />
       </div>
     );
   }
@@ -72,14 +75,17 @@ class Controls extends Component<IProps, IState> {
   private reportUpdateUpTheChain() {
     // This feels convoluted, and I think that centralizing this logic in a reducer will be beneficial.
 
-    const filterFunction = (filters: IFilters) => {
+    const filterFunction = (filters: IState) => {
       // If something is clicked, apply the year filter only
-      return (d: any) => filters.yearFilter(d) && filters.jobTitleFilter(d);
+      return (d: ISalary) => (filters.yearFilter(d) 
+                          && filters.jobTitleFilter(d)
+                          && filters.USstateFilter(d));
     };
 
     this.props.updateDataFilter(
       filterFunction(this.state), // Filter functions
       { // Criteria that comes out of the filter function
+        USstate: this.state.USstate,
         jobTitle: this.state.jobTitle,
         year: this.state.year,
       }
@@ -113,6 +119,7 @@ class Controls extends Component<IProps, IState> {
   }
   private updateUSstateFilter = (USstate: string, reset: boolean) => {
     let filter = (d: ISalary) => d.USstate === USstate;
+
     if (reset || !USstate) {
       filter = () => true;
       USstate = "*";
