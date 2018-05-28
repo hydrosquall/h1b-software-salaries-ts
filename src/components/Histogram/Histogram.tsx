@@ -34,7 +34,7 @@ class Histogram extends Component<IProps, any> {
   }
 
   public componentWillReceiveProps(newProps: IProps) {
-    return 1;
+    this.updateD3(newProps);
   }
 
   public render() {

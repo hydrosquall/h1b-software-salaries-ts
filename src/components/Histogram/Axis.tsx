@@ -23,6 +23,8 @@ const basicAxis = function (this: IAxis) {
     .tickFormat(d => `${d3.format(".2s")(d)}`)
     .ticks(this.props.data.length);
   d3.select(this.myRef.current)
+    .transition()
+    .duration(500)
     .call(axis as any); // Axis lacks "select" prop in TS definition, so this needs to be coerced
 
   return null;

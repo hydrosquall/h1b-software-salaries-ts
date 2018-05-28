@@ -12,7 +12,7 @@ interface IProps {
 class Title extends Component<IProps> {
   get yearsFragment() {
     const year = this.props.filteredBy.year;
-    return year === "*" ? "" : `in ${year}`;
+    return year === "*" ? "" : ` in ${year}`;
   }
 
   get stateFragment() {
