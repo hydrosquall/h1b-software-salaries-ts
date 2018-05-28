@@ -5,7 +5,7 @@ import * as topojson from "topojson";
 
 import CountyMap from "../components/CountyMap";
 import Histogram from "../components/Histogram";
-import { Description, Title } from "../components/Meta";
+import { Description, GraphDescription, Title } from "../components/Meta";
 import Preloader from "../components/Preloader";
 
 import { ICountyName, ICountyValue, IFilter, ISalary }from '../interfaces';
@@ -90,6 +90,7 @@ class App extends Component<any, IState> {
           medianIncomesByCounty={this.state.medianIncomesByCounty}
           filteredBy={this.state.filteredBy}
         />
+        <GraphDescription filteredBy={this.state.filteredBy} />
         <svg height="500" width="1100">
           <CountyMap {...mapProps} />
           <Histogram {...histogramProps} />
