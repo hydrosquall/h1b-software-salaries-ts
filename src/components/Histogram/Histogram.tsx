@@ -27,8 +27,10 @@ class Histogram extends Component<IProps, any> {
     // TODO: figure out how to get compiler to let first argument by ISalary instead of "any". 
     this.histogram = d3.histogram() as d3.HistogramGenerator<any, number>; 
     this.widthScale = d3.scaleLinear();
-    this.widthScale.clamp(true); // protect against negative values
     this.yScale = d3.scaleLinear();
+    // protect against negative values
+    this.widthScale.clamp(true); 
+    this.yScale.clamp(true);
 
     this.updateD3(props);
   }
@@ -39,6 +41,11 @@ class Histogram extends Component<IProps, any> {
 
   public render() {
     const translate = `translate(${this.props.x},${this.props.y})`;
+
+    if (this.props.data.length === 0) {
+      return null;
+    }
+
     const bars = this.histogram(this.props.data); // note this is duplicated in updateD3
 
     return (

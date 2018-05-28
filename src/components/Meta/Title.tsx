@@ -57,7 +57,7 @@ class Title extends Component<IProps> {
       ) : ( // Either year or state are blank
       <h2>
           {this.jobTitleFragment} ${mean}/year
-          {this.stateFragment ? `in ${this.stateFragment}` : ""} 
+          {this.stateFragment ? `in   ${this.stateFragment}` : ""} 
           {this.yearsFragment}
         </h2>
     );
