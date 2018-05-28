@@ -22,7 +22,7 @@ class Title extends Component<IProps> {
 
   get jobTitleFragment () {
     const { jobTitle, year } = this.props.filteredBy;
-    let title = "";
+    let title;
     // Did a first pass refactoring of the IF tree vs the original example, room to improve.
     if (jobTitle === '*') {
       title = "The average H1B in tech";
@@ -47,11 +47,25 @@ class Title extends Component<IProps> {
 
   public render() {
     const mean = this.format(d3.mean(this.props.data, valueAccessor) as number);
+    let title;
+    const hasYearAndState = this.yearsFragment && this.stateFragment;
 
+    if (hasYearAndState) {
+      title = (
+        <h2>
+          In {this.stateFragment}, {this.jobTitleFragment} 
+          ${mean}/year {this.yearsFragment}
+        </h2>
+      )
+    } else {
+      title = <h2>
+          {this.jobTitleFragment} ${mean}/year
+          {this.stateFragment ? `in ${this.stateFragment}` : ""} 
+          {this.yearsFragment}
+        </h2>;
+    }
 
-
-
-    return <h1>Title</h1>;
+    return title;
   }
 }
 
