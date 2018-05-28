@@ -134,7 +134,7 @@ class App extends Component<any, IState> {
         </svg>
         <Controls 
           data={this.state.techSalaries}
-          updateDataFilter={updateFilter}
+          updateDataFilter={this.updateDataFilter}
         />
       </div>
     );
@@ -164,7 +164,7 @@ class App extends Component<any, IState> {
       value: medianSalary - medianHousehold.medianIncome
     };
   }
-  private updateDataFilter (filter: (d: any) => boolean, filteredBy: IFilter) {
+  private updateDataFilter = (filter: (d: any) => boolean, filteredBy: IFilter) => {
     const oldFilter = this.state.filteredBy;
     const newFilter = {
       ...oldFilter,

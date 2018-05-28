@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import _ from 'lodash';
 
 interface IProps {
   readonly name: string;

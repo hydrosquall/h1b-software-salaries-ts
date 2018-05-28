@@ -45,7 +45,6 @@ class Controls extends Component<IProps, IState> {
     return (
       <div>
         <ControlRow
-          // data={data}
           toggleNames={Array.from(years.values())}
           picked={this.state.year}
           capitalize={false}
