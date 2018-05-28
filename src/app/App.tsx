@@ -5,8 +5,12 @@ import * as topojson from "topojson";
 
 import CountyMap from "../components/CountyMap";
 import Histogram from "../components/Histogram";
+import Title from "../components/Meta";
 import Preloader from "../components/Preloader";
-import { ICountyName, ICountyValue, ISalary }from '../interfaces';
+
+import { ICountyName, ICountyValue, IFilter, ISalary }from '../interfaces';
+
+import { valueAccessor } from '../utils';
 import "./App.css";
 import { loadAllData } from "./DataHandling";
 import logo from "./logo.svg";
@@ -17,15 +21,21 @@ interface IState {
   countyNames: ICountyName[]; // name, id
   USstateNames: object[],
   usTopoJson: topojson.UsAtlas | null,
+  filteredBy: IFilter,
 };
 
 // TODO: Pull utils into a general shared file
-const valueAccessor = (d: ISalary) => d.base_salary;
+
 
 class App extends Component<any, IState> {
   public state: IState = {
     USstateNames: [],
     countyNames: [],
+    filteredBy: {
+      USstate: '*',
+      jobTitle: '*',
+      year: '*',
+    },
     medianIncomes: {},
     techSalaries: [],
     usTopoJson: null
@@ -70,10 +80,16 @@ class App extends Component<any, IState> {
     }
   
     return (
-      <svg height="500" width="1100">
-        <CountyMap {...mapProps} />
-        <Histogram {...histogramProps} />
-      </svg>
+      <div className="App container">
+        <Title
+          data={filteredSalaries}
+          filteredBy={this.state.filteredBy}
+        />
+        <svg height="500" width="1100">
+          <CountyMap {...mapProps} />
+          <Histogram {...histogramProps} />
+        </svg>
+      </div>
     );
   }
   /**

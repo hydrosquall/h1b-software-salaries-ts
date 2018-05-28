@@ -13,4 +13,11 @@ interface ISalary {
   readonly base_salary: number;
 }
 
-export { ICountyValue, ICountyName, ISalary };
+// Used for interactions
+interface IFilter {
+  USstate: string;
+  year: string;
+  jobTitle: string;
+}
+
+export { ICountyValue, ICountyName, IFilter, ISalary };
