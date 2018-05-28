@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import React, { Component } from "react";
 import { IFilter, ISalary } from "../../interfaces";
+import { valueAccessor } from '../../utils';
 import USStatesMap from "./USStatesMap";
 
 interface IProps {
@@ -37,7 +38,7 @@ class Title extends Component<IProps> {
   }
 
   get format() {
-    const salaryExtent = d3.extent(this.props.data, d => d.base_salary) as [number, number];
+    const salaryExtent = d3.extent(this.props.data, valueAccessor) as [number, number];
     return d3
       .scaleLinear()
       .domain(salaryExtent)
@@ -45,9 +46,9 @@ class Title extends Component<IProps> {
   }
 
   public render() {
-    const mean = this.format(d3.mean(this.props.data, d => d.base_salary) as number);
+    const mean = this.format(d3.mean(this.props.data, valueAccessor) as number);
 
-    
+
 
 
     return <h1>Title</h1>;
