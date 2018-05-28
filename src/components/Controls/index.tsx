@@ -43,6 +43,8 @@ class Controls extends Component<IProps, IState> {
   }
 
   private reportUpdateUpTheChain() {
+    // This feels convoluted, and I think that centralizing this logic in a reducer will be beneficial.
+    
     const filterFunction = (filters: IFilters) => { // If something is clicked, apply the year filter only
       return (d: any) => filters.yearFilter(d);
     };
