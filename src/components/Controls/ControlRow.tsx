@@ -27,7 +27,7 @@ class ControlRow extends Component<IProps, IState> {
     const toggleValues = _.zipObject(
       toggles,
       toggles.map((name) => name === this.props.picked)
-    ); // Slice dictionary where keys are toggleNames, and values are bools
+    ); // dictionary where keys are toggleNames, and values are bools
     this.setState({ toggleValues })
   }
 
@@ -40,7 +40,7 @@ class ControlRow extends Component<IProps, IState> {
   /**
    * makePick Change state toggleValues when a button is clicked
    */
-  public makePick(picked: string, newPickStatus: boolean) {
+  public makePick = (picked: string, newPickStatus: boolean) => {
     const { toggleValues } = this.state;
     const newToggleValues = _.mapValues(
       toggleValues,
@@ -53,24 +53,23 @@ class ControlRow extends Component<IProps, IState> {
   }
 
   public render() { 
-    const addToggle = this.addToggle.bind(this);
     return (
       <div className="row">
         <div className="col-md-12">
-          {this.props.toggleNames.map(addToggle)}
+          {this.props.toggleNames.map(this.addToggle)}
         </div>
       </div>
     )
   }
 
-  private addToggle (name: string) {
+  private addToggle = (name: string) => {
     const key = `toggle-${name}`;
     const label = (this.props.capitalize) ? name.toUpperCase() : name;
     const toggleProps = {
       key,
       label,
       name,
-      onClick: this.makePick.bind(this), // use arrow function?
+      onClick: this.makePick, // use arrow function?
       value: this.state.toggleValues[name],
     }
     return <Toggle {...toggleProps} />;

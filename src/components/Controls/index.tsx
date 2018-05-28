@@ -41,7 +41,6 @@ class Controls extends Component<IProps, IState> {
   public render() {
     const {data} = this.props;
     const years = new Set(data.map(d => `${d.submit_date.getFullYear()}`));
-    const yearFilter = this.updateYearFilter.bind(this);
 
     return (
       <div>
@@ -50,7 +49,7 @@ class Controls extends Component<IProps, IState> {
           toggleNames={Array.from(years.values())}
           picked={this.state.year}
           capitalize={false}
-          updateDataFilter={yearFilter}
+          updateDataFilter={this.updateYearFilter}
         />
       </div>
     );
@@ -64,14 +63,14 @@ class Controls extends Component<IProps, IState> {
     };
 
     this.props.updateDataFilter(
-      filterFunction(this.state), // Filter funcionts
+      filterFunction(this.state), // Filter functions
       {                           // Filter params
         year: this.state.year
       }
     );
   }
 
-  private updateYearFilter (year: string, reset: boolean) {
+  private updateYearFilter = (year: string, reset: boolean) => {
     let filter = (d: ISalary) => d.submit_date.getFullYear() === +year;
 
     if (reset || !year) {
