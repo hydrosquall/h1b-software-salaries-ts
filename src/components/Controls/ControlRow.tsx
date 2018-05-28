@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { Component } from "react";
 import Toggle from "./Toggle";
 
-interface IYearFilter { // Temporary because we only filter 1 thing at a time right now
+interface IYearFilter { // Temporary because we only filter 1 thing at a time
   year: string;
 }
 
@@ -64,7 +64,7 @@ class ControlRow extends Component<IProps, IState> {
 
   private _addToggle(name: string) {
     const key = `toggle-${name}`;
-    const label = (this.props.capitalize) ? name.toUpperCase : name;
+    const label = (this.props.capitalize) ? name.toUpperCase() : name;
     const toggleProps = {
       key,
       label,
