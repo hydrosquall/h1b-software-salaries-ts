@@ -4,30 +4,31 @@ import React, { Component } from 'react';
 import { ISalary } from "../../interfaces";
 import ControlRow from './ControlRow';
 
+type filterFunctionType = (d: ISalary) => boolean;
+
 // Extra temporary interfaces until all the metadata shows up
 interface IFilterParams {
   jobTitle: string;
   year: string;
 }
 interface IFilters {
-  yearFilter: (d: ISalary) => boolean;
-  jobTitleFilter: (d: ISalary) => boolean;
+  yearFilter: filterFunctionType;
+  jobTitleFilter: filterFunctionType;
 }
 // End Extra Interfaces
 
 interface IProps {
-  updateDataFilter: (filter: (d: ISalary) => boolean, filteredBy: IFilterParams) => void;
+  updateDataFilter: (filter: filterFunctionType, filteredBy: IFilterParams) => void;
   readonly data: ISalary[];
 }
 
 interface IState {
   year: string;
-  yearFilter: (d?: ISalary) => boolean;
+  yearFilter: filterFunctionType;
   jobTitle: string;
-  jobTitleFilter: (d?: ISalary) => boolean;
+  jobTitleFilter: filterFunctionType;
   USstate: string;
-  USstateFilter: (d?: ISalary) => boolean;
-  
+  USstateFilter: filterFunctionType;
 }
 
 class Controls extends Component<IProps, IState> {
