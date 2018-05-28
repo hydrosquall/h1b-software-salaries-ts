@@ -86,29 +86,33 @@ class Description extends Component<IProps> {
     const medians = this.props.medianIncomesByCounty;
 
     // TODO: these two sortby/key/map/filter sections look very similar.
-    let ordered = _.sortBy(
+    // We can speed this up by searching directly for the max.
+    // bestCounty
+    const dataLength = this.props.data.length;
+    const orderedCounties = _.sortBy(
       _.keys(byCounty)
         .map(county => byCounty[county])
-        .filter(d => d.length / this.props.data.length > 0.01),
+        .filter(d => d.length / dataLength > 0.01),
       items =>
         (d3.mean(items, valueAccessor) as number) -
         medians[items[0].countyID][0].medianIncome
     );
 
-    let best = ordered[ordered.length - 1];
-    const countyMedian = medians[best[0].countyID][0].medianIncome;
-    const byCity = _.groupBy(best, "city");
-
-    ordered = _.sortBy(
+    const bestCounty = orderedCounties[orderedCounties.length - 1];
+    const countyMedian = medians[bestCounty[0].countyID][0].medianIncome;
+    const byCity = _.groupBy(bestCounty, "city");
+    const orderedCities = _.sortBy(
       _.keys(byCity)
         .map((cityKey) => byCity[cityKey])
-        .filter(d => d.length / best.length > 0.01),
-      items => d3.mean(items, valueAccessor) as number - countyMedian
+        .filter(d => d.length / bestCounty.length > 0.01),
+      items => d3.mean(items, valueAccessor) as number
     );
-
-    best = ordered[ordered.length - 1];
-    const city = S(best[0].city).titleCase().s + `, ${best[0].USstate}`;
-    const mean = d3.mean(best, valueAccessor) as number;
+  
+    // const altBest = best[d3.scan(best, (a, b) => b.base_salary - a.base_salary) as number];
+    const bestCity = orderedCities[orderedCities.length - 1];
+    const city = S(bestCity[0].city).titleCase().s + `, ${bestCity[0].USstate}`;
+    const mean = d3.mean(bestCity, valueAccessor) as number; // mean in the best city
+  
     const jobFragment = this.jobTitleFragment
       .replace("H1B work visas for", "")
       .replace("H1B work visas", "");
@@ -139,7 +143,7 @@ class Description extends Component<IProps> {
 
     return (
       <p className="lead">
-        {this.yearsFragment ? this.yearsFragment : "Since 2012"} the{" "}
+        {this.yearsFragment ? this.yearsFragment : "Since 2012,"} the{" "}
         {this.USstateFragment} tech industry{" "}
         {this.yearsFragment ? "sponsored" : "has sponsored"}{" "}
         <b>
