@@ -47,24 +47,20 @@ class Title extends Component<IProps> {
 
   public render() {
     const mean = this.format(d3.mean(this.props.data, valueAccessor) as number);
-    let title;
     const hasYearAndState = this.yearsFragment && this.stateFragment;
-
-    if (hasYearAndState) {
-      title = (
+    const title = hasYearAndState ?
+      (
         <h2>
-          In {this.stateFragment}, {this.jobTitleFragment} 
+          In {this.stateFragment}, {this.jobTitleFragment}
           ${mean}/year {this.yearsFragment}
         </h2>
-      )
-    } else {
-      title = <h2>
+      ) : ( // Either year or state are blank
+      <h2>
           {this.jobTitleFragment} ${mean}/year
           {this.stateFragment ? `in ${this.stateFragment}` : ""} 
           {this.yearsFragment}
-        </h2>;
-    }
-
+        </h2>
+    );
     return title;
   }
 }
