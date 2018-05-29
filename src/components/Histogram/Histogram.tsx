@@ -65,13 +65,13 @@ class Histogram extends Component<IProps, any> {
 
   private makeBar = (bar: d3.Bin<ISalary, number>) => {
     const percent = bar.length / this.props.data.length * 100;
-
+    const height = (bar.x1 - bar.x0);
     const props = {
       // tslint:disable:object-literal-sort-keys
       x: this.props.axisMargin,
-      y: this.yScale(bar.x0),
+      y: this.yScale(bar.x0 || 0),
       width: this.widthScale(bar.length),
-      height: this.yScale(bar.x1 - bar.x0),
+      height: this.yScale(height || 0),
       key: `histogram-bar-${bar.x0}`,
       percent
       // tslint:enable:object-literal-sort-keys

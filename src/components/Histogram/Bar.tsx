@@ -24,7 +24,7 @@ const HistogramBar: SFC<IProps> = ({ x, y, percent, width, height }) => {
 
   // TODO: investigate these magic numbers
   const rectProps = {
-    height: height - 2,
+    height: (height > 2) ? height - 2 : 0,
     transform: "translate(0,1)",
     width
   }

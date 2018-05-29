@@ -18,6 +18,7 @@ class MedianLine extends Component<IProps> {
 
   public componentWillMount() {
     this.yScale = d3.scaleLinear(); 
+    this.yScale.clamp(true);
     this.updateD3(this.props);
   }
   public componentWillReceiveProps(newProps: IProps) {
@@ -25,6 +26,10 @@ class MedianLine extends Component<IProps> {
   }
   
   public render() {
+    if (this.props.data.length === 0) {
+      return null;
+    }
+
     const median = this.props.median || d3.median(this.props.data, this.props.valueAccessor) as number;
     const yStart = 5;
     const line = d3.line()([[0, yStart], // Draws a line starting at point 0,5, and ending at (width, 5)
