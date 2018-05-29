@@ -57,7 +57,8 @@ export const loadAllData = (callback = _.noop) => {
     .defer(d3.json,'data/us.json')
     .defer(d3.csv, 'data/us-county-names-normalized.csv', cleanCountyNames)
     .defer(d3.csv, 'data/county-median-incomes.csv', cleanIncomes)
-    .defer(d3.csv, 'data/h1bs-2012-2016-shortened.csv', cleanSalary)
+    // .defer(d3.csv, 'data/h1bs-2012-2016-shortened.csv', cleanSalary) // Use during development
+    .defer(d3.csv, 'data/h1bs-2012-2016.csv', cleanSalary)
     .defer(d3.tsv, 'data/us-state-names.tsv', cleanUSStateName)
     .await((error: any, us: any, countyNames: ICountyName[], medianIncomes: any, techSalaries: any, USstateNames) => {
 
