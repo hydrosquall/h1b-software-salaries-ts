@@ -1,4 +1,8 @@
 
+### 0.4.0 2018-05-28
+
+- Add routing (load specific views by changing the window hash) without React Router
+- Deploy to Github
 
 ### 0.3.0 2018-05-28
 
