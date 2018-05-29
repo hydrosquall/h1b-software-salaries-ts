@@ -38,7 +38,26 @@ class Controls extends Component<IProps, IState> {
     yearFilter: () => true
   };
 
+  public componentDidMount() {
+    // Basic way to implement routing
+    const [year, USstate, jobTitle] = window.location.hash
+                                                      .replace('#', '')
+                                                      .split("-");
+    if (year !== '*' && year) {
+      this.updateYearFilter(year, false);
+    }
+    if (USstate !== '*' && USstate) {
+      this.updateUSstateFilter(USstate, false);
+    }
+    if (jobTitle !== '*' && jobTitle) {
+      this.updateJobTitleFilter(jobTitle, false);
+    }
+  }
   public componentDidUpdate(prevProps: any, prevState: IState) {
+    window.location.hash = [this.state.year || '*',
+                            this.state.USstate || '*', 
+                            this.state.jobTitle || '*'].join("-");
+
     this.reportUpdateUpTheChain();
   }
 
