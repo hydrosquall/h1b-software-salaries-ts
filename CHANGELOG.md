@@ -1,4 +1,10 @@
 
+
+### 0.3.0 2018-05-28
+
+- Filters have been installed for 3 types of metadata. They usually work, but after applying all 3, it's possible to get into a state where nothing gets displayed at all.
+- It might be easier to debug this if all the filter logic gets pulled out into redux.
+
 ### 0.2.0 2018-05-28
 
 - Add histogram, text description, graph description - non-interactive portion is complete.
