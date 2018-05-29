@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "H1B Salary Data Browser",
+  "name": "H1B Tech Visa Salaries Data Browser / Typescript",
   "icons": [
     {
       "src": "favicon.ico",
