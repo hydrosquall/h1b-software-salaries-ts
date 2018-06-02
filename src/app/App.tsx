@@ -12,6 +12,7 @@ import Preloader from "../components/Preloader";
 
 import { ICountyName, ICountyValue, IFilter, ISalary }from '../interfaces';
 
+import USStatesMap from "../components/Meta/USStatesMap";
 import { valueAccessor } from '../utils';
 import "./App.css";
 import { loadAllData } from "./DataHandling";
@@ -24,6 +25,9 @@ interface IStateGroup {
 interface IMedian {
   readonly medianIncome: number;
 }
+
+type filterFunctionType = (d: ISalary) => boolean;
+
 
 interface IState {
   medianIncomes: object; // Mapping from county.id to d county data
@@ -59,9 +63,7 @@ class App extends Component<any, IState> {
   };
 
   public shouldComponentUpdate(nextProps: any, nextState: IState) {
-    // Note: app crashes when a selected toggle is untoggled without this method
-    // Not 100% clear yet why this fixes it, but going to leave alone for now.
-    // I think going to redux will help.
+    // Going to redux might simplify this in the future
     const { techSalaries, filteredBy } = this.state;
     const changedSalaries = (techSalaries && techSalaries.length)
                             !== (nextState.techSalaries && nextState.techSalaries.length);
@@ -72,14 +74,47 @@ class App extends Component<any, IState> {
     return changedSalaries || changedFilters;
   }
 
+  /**
+   * salariesFilter
+   *  Return a function which can be passed to array.filter to screen data that doesn't meet the filterCriteria
+   */
+  public buildSalariesFilter(filterCriteria: IFilter) {
+    const { year, USstate, jobTitle } = filterCriteria;
+    const baseFilter = (d: ISalary) => true; // Lets all data through
+
+    const yearFilter = (d: ISalary) => d.submit_date && d.submit_date.getFullYear() === +year;
+    const stateFilter = (d: ISalary) => d.USstate === USstate;
+    const jobFilter = (d: ISalary) => d.clean_job_title === jobTitle;
+
+    // Decide which curried functions to keep using
+    const criteria = [year, USstate, jobTitle];
+    const filters = [yearFilter, stateFilter, jobFilter];
+    const pairs = _.zip(criteria, filters);
+    const appliedFilters = [] as filterFunctionType[];
+    pairs.forEach((pair, index) => {
+      const [condition, filter] = pair;
+      if (condition !== '*') {
+        appliedFilters.push(filter as filterFunctionType);
+      } 
+    });
+
+    // Combine all of the tests into a single function
+    const globalFilter = (d: ISalary) => appliedFilters.every(
+      (filter: filterFunctionType) => {
+      return filter(d);
+    });
+
+    return appliedFilters.length > 0 ? globalFilter : baseFilter;
+  }
 
   public render() {
     const isDataLoaded = this.state.techSalaries.length > 1;
     if (!isDataLoaded) {
       return <Preloader />;
     }
-  
-    const filteredSalaries = this.state.techSalaries.filter(this.state.salariesFilter);
+
+    const combinedFilter = this.buildSalariesFilter(this.state.filteredBy);
+    const filteredSalaries = this.state.techSalaries.filter(combinedFilter);
     const filteredSalariesMap = _.groupBy(filteredSalaries, "countyID");
     const countyValues = this.getCountyValues(this.state.countyNames, filteredSalariesMap);
     let zoom = null;
@@ -177,15 +212,13 @@ class App extends Component<any, IState> {
       value: medianSalary - medianHousehold.medianIncome
     };
   }
-  private updateDataFilter = (filter: (d: any) => boolean, filteredBy: IFilter) => {
+  private updateDataFilter = (filteredBy: IFilter) => {
     const newFilteredBy = {
       ...this.state.filteredBy, // old filter
       ...filteredBy
     }
-
     this.setState({
       filteredBy: newFilteredBy,
-      salariesFilter: filter,
     });
   }
 }
