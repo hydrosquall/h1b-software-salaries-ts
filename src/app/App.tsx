@@ -9,7 +9,6 @@ import Histogram from "../components/Histogram";
 import MedianLine from "../components/MedianLine";
 import { Description, GraphDescription, Title } from "../components/Meta";
 import Preloader from "../components/Preloader";
-import pipeFromList from '../utils/composition';
 
 import { ICountyName, ICountyValue, IFilter, ISalary }from '../interfaces';
 
@@ -61,9 +60,7 @@ class App extends Component<any, IState> {
   };
 
   public shouldComponentUpdate(nextProps: any, nextState: IState) {
-    // Note: app crashes when a selected toggle is untoggled without this method
-    // Not 100% clear yet why this fixes it, but going to leave alone for now.
-    // I think going to redux will help.
+    // Going to redux might simplify this in the future
     const { techSalaries, filteredBy } = this.state;
     const changedSalaries = (techSalaries && techSalaries.length)
                             !== (nextState.techSalaries && nextState.techSalaries.length);
@@ -76,26 +73,20 @@ class App extends Component<any, IState> {
 
   /**
    * salariesFilter
-   *  Return a function which combines the search terms indicated by the criteria object
+   *  Return a function which can be passed to array.filter to screen data that doesn't meet the filterCriteria
    */
   public buildSalariesFilter(filterCriteria: IFilter) {
     const { year, USstate, jobTitle } = filterCriteria;
     const baseFilter = (d: ISalary) => true; // Lets all data through
 
-    // Currying
     const yearFilter = (d: ISalary) => d.submit_date && d.submit_date.getFullYear() === +year;
     const stateFilter = (d: ISalary) => d.USstate === USstate;
     const jobFilter = (d: ISalary) => d.clean_job_title === jobTitle;
 
-    // Let's decide which curried functions to keep using
+    // Decide which curried functions to keep using
     const criteria = [year, USstate, jobTitle];
     const filters = [yearFilter, stateFilter, jobFilter];
     const pairs = _.zip(criteria, filters);
-
-    const addOne = (d: number) => d + 1;
-    const addTwo = (d: number) => d + 2;
-    const addThree = pipeFromList([addOne, addTwo]);
-
     const appliedFilters = [] as any;
     pairs.forEach((pair, index) => {
       const [condition, filter] = pair;
@@ -104,13 +95,12 @@ class App extends Component<any, IState> {
       } 
     });
 
+    // Combine all of the tests into a single function
     const globalFilter = (d: ISalary) => appliedFilters.every(
       (filter: (d: ISalary) => boolean) => {
       return filter(d);
     });
 
-
-    // return appliedFilters.length > 0 ? fp.compose(identity, ...appliedFilters) : baseFilter;
     return appliedFilters.length > 0 ? globalFilter : baseFilter;
   }
 
@@ -119,6 +109,7 @@ class App extends Component<any, IState> {
     if (!isDataLoaded) {
       return <Preloader />;
     }
+
     const combinedFilter = this.buildSalariesFilter(this.state.filteredBy);
     const filteredSalaries = this.state.techSalaries.filter(combinedFilter);
     const filteredSalariesMap = _.groupBy(filteredSalaries, "countyID");
