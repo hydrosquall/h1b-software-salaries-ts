@@ -64,7 +64,7 @@ class Controls extends Component<IProps, IState> {
     const USstates = new Set(data.map(d => d.USstate));
 
     return (
-      <div>
+      <div className="controlRows">
         <ControlRow
           toggleNames={Array.from(years.values())}
           picked={this.state.year}
