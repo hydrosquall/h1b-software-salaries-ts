@@ -1,4 +1,12 @@
 
+
+
+### 0.5.0
+
+- Fix [bug](https://github.com/Swizec/react-d3js-step-by-step/issues/2) where adding/removing multiple filters leads to app not working
+- Hoist data filtering logic up to `App.jsx`
+
+
 ### 0.4.0 2018-05-28
 
 - Add routing (load specific views by changing the window hash) without React Router
