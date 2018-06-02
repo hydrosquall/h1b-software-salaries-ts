@@ -31,6 +31,12 @@ To deploy
 npm run deploy
 ```
 
+To run integration tests
+
+```bash
+npm run cypress
+```
+
 ## Progress
 
 See [Changelog](./CHANGELOG.md) for notes on what was accomplished by each tag.

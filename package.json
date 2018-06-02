@@ -23,7 +23,8 @@
     "build": "react-scripts-ts build",
     "test": "jest",
     "eject": "react-scripts-ts eject",
-    "deploy": "npm run build && gh-pages -d build"
+    "deploy": "npm run build && gh-pages -d build",
+    "cypress": "cypress open"
   },
   "devDependencies": {
     "@types/enzyme": "^3.1.10",
@@ -32,6 +33,7 @@
     "@types/node": "^10.1.2",
     "@types/react": "^16.3.14",
     "@types/react-dom": "^16.0.5",
+    "cypress": "^3.0.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint-config-airbnb": "^16.1.0",
