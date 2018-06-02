@@ -9,9 +9,11 @@ import Histogram from "../components/Histogram";
 import MedianLine from "../components/MedianLine";
 import { Description, GraphDescription, Title } from "../components/Meta";
 import Preloader from "../components/Preloader";
+import pipeFromList from '../utils/composition';
 
 import { ICountyName, ICountyValue, IFilter, ISalary }from '../interfaces';
 
+import USStatesMap from "../components/Meta/USStatesMap";
 import { valueAccessor } from '../utils';
 import "./App.css";
 import { loadAllData } from "./DataHandling";
@@ -72,14 +74,53 @@ class App extends Component<any, IState> {
     return changedSalaries || changedFilters;
   }
 
+  /**
+   * salariesFilter
+   *  Return a function which combines the search terms indicated by the criteria object
+   */
+  public buildSalariesFilter(filterCriteria: IFilter) {
+    const { year, USstate, jobTitle } = filterCriteria;
+    const baseFilter = (d: ISalary) => true; // Lets all data through
+
+    // Currying
+    const yearFilter = (d: ISalary) => d.submit_date && d.submit_date.getFullYear() === +year;
+    const stateFilter = (d: ISalary) => d.USstate === USstate;
+    const jobFilter = (d: ISalary) => d.clean_job_title === jobTitle;
+
+    // Let's decide which curried functions to keep using
+    const criteria = [year, USstate, jobTitle];
+    const filters = [yearFilter, stateFilter, jobFilter];
+    const pairs = _.zip(criteria, filters);
+
+    const addOne = (d: number) => d + 1;
+    const addTwo = (d: number) => d + 2;
+    const addThree = pipeFromList([addOne, addTwo]);
+
+    const appliedFilters = [] as any;
+    pairs.forEach((pair, index) => {
+      const [condition, filter] = pair;
+      if (condition !== '*') {
+        appliedFilters.push(filter as (d: ISalary) => boolean);
+      } 
+    });
+
+    const globalFilter = (d: ISalary) => appliedFilters.every(
+      (filter: (d: ISalary) => boolean) => {
+      return filter(d);
+    });
+
+
+    // return appliedFilters.length > 0 ? fp.compose(identity, ...appliedFilters) : baseFilter;
+    return appliedFilters.length > 0 ? globalFilter : baseFilter;
+  }
 
   public render() {
     const isDataLoaded = this.state.techSalaries.length > 1;
     if (!isDataLoaded) {
       return <Preloader />;
     }
-  
-    const filteredSalaries = this.state.techSalaries.filter(this.state.salariesFilter);
+    const combinedFilter = this.buildSalariesFilter(this.state.filteredBy);
+    const filteredSalaries = this.state.techSalaries.filter(combinedFilter);
     const filteredSalariesMap = _.groupBy(filteredSalaries, "countyID");
     const countyValues = this.getCountyValues(this.state.countyNames, filteredSalariesMap);
     let zoom = null;
