@@ -1,11 +1,29 @@
 language: node_js
 node_js:
   - 10.3
-cache:
-  directories:
-    - ~/.npm
-    - ~/.cache
-install:
-  - npm ci
-script:
-  - npm run test
+cache: 
+  directories: 
+    - ~/.npm 
+    - ~/.cache 
+
+stages: 
+  - test 
+  - name: deploy 
+    if: branch = master
+
+test: 
+  install: 
+    - npm ci 
+  script: 
+    - npm run test 
+
+deploy: 
+  install: 
+    - npm ci 
+  script: 
+  - echo "testing"
+  after_success: 
+  - npm run deploy 
+  branches:
+    only:
+    - master
