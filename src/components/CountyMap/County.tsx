@@ -38,15 +38,13 @@ class County extends Component<IProps, object> {
   public render() {
     const { value, geoPath, feature, quantize } = this.props;
 
-    let color = BlankColor;
-    if (value) {
-      color = ChoroplethColors[quantize(value)];
-    }
+    const color = value ? ChoroplethColors[quantize(value)]: BlankColor;
   
     const featurePath = geoPath(feature);
     if (!featurePath) {
       return null
     }  
+
     return (
       <path
         d={featurePath}
