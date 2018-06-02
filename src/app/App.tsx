@@ -26,6 +26,9 @@ interface IMedian {
   readonly medianIncome: number;
 }
 
+type filterFunctionType = (d: ISalary) => boolean;
+
+
 interface IState {
   medianIncomes: object; // Mapping from county.id to d county data
   medianIncomesByCounty: object;
@@ -87,17 +90,17 @@ class App extends Component<any, IState> {
     const criteria = [year, USstate, jobTitle];
     const filters = [yearFilter, stateFilter, jobFilter];
     const pairs = _.zip(criteria, filters);
-    const appliedFilters = [] as any;
+    const appliedFilters = [] as filterFunctionType[];
     pairs.forEach((pair, index) => {
       const [condition, filter] = pair;
       if (condition !== '*') {
-        appliedFilters.push(filter as (d: ISalary) => boolean);
+        appliedFilters.push(filter as filterFunctionType);
       } 
     });
 
     // Combine all of the tests into a single function
     const globalFilter = (d: ISalary) => appliedFilters.every(
-      (filter: (d: ISalary) => boolean) => {
+      (filter: filterFunctionType) => {
       return filter(d);
     });
 
@@ -209,15 +212,13 @@ class App extends Component<any, IState> {
       value: medianSalary - medianHousehold.medianIncome
     };
   }
-  private updateDataFilter = (filter: (d: any) => boolean, filteredBy: IFilter) => {
+  private updateDataFilter = (filteredBy: IFilter) => {
     const newFilteredBy = {
       ...this.state.filteredBy, // old filter
       ...filteredBy
     }
-
     this.setState({
       filteredBy: newFilteredBy,
-      salariesFilter: filter,
     });
   }
 }

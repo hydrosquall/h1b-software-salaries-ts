@@ -4,8 +4,6 @@ import React, { Component } from 'react';
 import { ISalary } from "../../interfaces";
 import ControlRow from './ControlRow';
 
-type filterFunctionType = (d: ISalary) => boolean;
-
 // Extra temporary interfaces until all the metadata shows up
 interface IFilterParams {
   readonly jobTitle: string;
@@ -15,27 +13,21 @@ interface IFilterParams {
 //
 
 interface IProps {
-  updateDataFilter: (filter: filterFunctionType, filteredBy: IFilterParams) => void;
+  updateDataFilter: (filteredBy: IFilterParams) => void;
   readonly data: ISalary[];
 }
 
 interface IState {
   year: string;
-  yearFilter: filterFunctionType;
   jobTitle: string;
-  jobTitleFilter: filterFunctionType;
   USstate: string;
-  USstateFilter: filterFunctionType;
 }
 
 class Controls extends Component<IProps, IState> {
   public state = {
     USstate: "*",
-    USstateFilter: () => true,
     jobTitle: "*",
-    jobTitleFilter: () => true,
     year: "*",
-    yearFilter: () => true
   };
 
   public componentDidMount() {
@@ -93,9 +85,7 @@ class Controls extends Component<IProps, IState> {
 
   private reportUpdateUpTheChain() {
     // This feels convoluted, and I think that centralizing this logic in a reducer will be beneficial.
-
     this.props.updateDataFilter(
-      () => true,
       { // Criteria that comes out of the filter function
         USstate: this.state.USstate,
         jobTitle: this.state.jobTitle,
@@ -109,10 +99,8 @@ class Controls extends Component<IProps, IState> {
     if (reset || !year) {
       year = "*";
     }
-
     this.setState({
       year,
-      yearFilter: () => true
     });
   };
   private updateJobTitleFilter = (title: string, reset: boolean) => {
@@ -121,7 +109,6 @@ class Controls extends Component<IProps, IState> {
     }
     this.setState({
       jobTitle: title,
-      jobTitleFilter: () => true
       
     });
   }
@@ -131,7 +118,6 @@ class Controls extends Component<IProps, IState> {
     }
     this.setState({
       USstate,
-      USstateFilter: () => true,
     });
   }
 }
