@@ -17,7 +17,7 @@ class Title extends Component<IProps> {
 
   get stateFragment() {
     const USstate = this.props.filteredBy.USstate;
-    return USstate === "*" ? "" : USStatesMap[USstate.toUpperCase()];
+    return USstate === "*" ? "" : ` ${USStatesMap[USstate.toUpperCase()]}`;
   }
 
   get jobTitleFragment () {
@@ -27,11 +27,11 @@ class Title extends Component<IProps> {
     if (jobTitle === '*') {
       title = "The average H1B in tech";
       const verb = (year === "*") ? "pays" : "paid";
-      title = `${title} ${verb}`;
+      title = `${title} ${verb} `;
     } else {
       title = `Software ${jobTitle}s on an H1B`;
       const verb = (year === '*') ? 'make' : 'made';
-      title = `${title} ${verb}`
+      title = `${title} ${verb} `
     }
 
     return title;
@@ -48,7 +48,8 @@ class Title extends Component<IProps> {
   public render() {
     const mean = this.format(d3.mean(this.props.data, valueAccessor) as number);
     const hasYearAndState = this.yearsFragment && this.stateFragment;
-    const title = hasYearAndState ?
+  
+    let title = hasYearAndState ?
       (
         <h2>
           In {this.stateFragment}, {this.jobTitleFragment}
@@ -56,11 +57,20 @@ class Title extends Component<IProps> {
         </h2>
       ) : ( // Either year or state are blank
       <h2>
-          {this.jobTitleFragment} ${mean}/year
-          {this.stateFragment ? `in   ${this.stateFragment}` : ""} 
+          {this.jobTitleFragment} ${mean}/year { ` `}
+          {this.stateFragment ? `in  ${this.stateFragment}` : ""} 
           {this.yearsFragment}
         </h2>
     );
+
+    if (mean === "NaN") {
+      const { USstate, year, jobTitle } = this.props.filteredBy;
+      title = (
+        <p>
+          We don't have enough data for state: {USstate}, Job: {jobTitle}, Year: {year}. Maybe another combination will be luckier 🍀!
+        </p>
+      )
+    }
     return (
       <div className="pageHead">
         {title}
