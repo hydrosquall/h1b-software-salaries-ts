@@ -21,10 +21,13 @@
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
-    "test": "jest",
     "eject": "react-scripts-ts eject",
     "deploy": "npm run build && gh-pages -d build",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "cypress:run": "cypress run",
+    "test:unit": "jest",
+    "test:integration": "start-server-and-test start http://localhost:3000 cypress:run",
+    "test": "npm run test:unit && npm run test:integration"
   },
   "devDependencies": {
     "@types/enzyme": "^3.1.10",
@@ -43,6 +46,7 @@
     "eslint-plugin-react": "^7.8.2",
     "gh-pages": "^1.1.0",
     "jest": "^23.0.0",
+    "start-server-and-test": "^1.4.1",
     "ts-jest": "^22.4.6",
     "typescript": "^2.8.3"
   }

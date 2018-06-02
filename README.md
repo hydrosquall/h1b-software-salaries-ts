@@ -1,5 +1,7 @@
 # H1B Salaries Data Browser - Typescript Edition
 
+![travis_status](https://img.shields.io/travis/hydrosquall/h1b-software-salaries-ts/master.svg)
+
 This project is a variation on Swizec Teller's demo from a lesson for a React/D3 hybrid course to practice using some new tools, including
 
 - [x] Using Typescript 2.8
