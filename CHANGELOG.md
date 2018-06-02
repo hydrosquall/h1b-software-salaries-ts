@@ -1,9 +1,11 @@
+### 0.6.0 2018-06-02
 
+- Add zoom-on-filter capabilities[#2](https://github.com/hydrosquall/h1b-software-salaries-ts/pull/2)
+- Improve user experience for filter combinations with missing data [#3](https://github.com/hydrosquall/h1b-software-salaries-ts/pull/3)
 
+### 0.5.0 2018-06-02
 
-### 0.5.0
-
-- Fix [bug](https://github.com/Swizec/react-d3js-step-by-step/issues/2) where adding/removing multiple filters leads to app not working
+- Fix [bug](https://github.com/Swizec/react-d3js-step-by-step/issues/2) where adding/removing multiple filters leads to app not working (Fix [#1](https://github.com/hydrosquall/h1b-software-salaries-ts/pull/1))
 - Hoist data filtering logic up to `App.jsx`
 
 
