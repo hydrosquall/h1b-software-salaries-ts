@@ -10,7 +10,7 @@ import MedianLine from "../components/MedianLine";
 import { Description, GraphDescription, Title } from "../components/Meta";
 import Preloader from "../components/Preloader";
 
-import { ICountyName, ICountyValue, IFilter, ISalary }from '../interfaces';
+import { ICountyName, ICountyValue, IFilter, ISalary, IStateName }from '../interfaces';
 
 import USStatesMap from "../components/Meta/USStatesMap";
 import { valueAccessor } from '../utils';
@@ -26,6 +26,7 @@ interface IMedian {
   readonly medianIncome: number;
 }
 
+
 type filterFunctionType = (d: ISalary) => boolean;
 
 
@@ -36,7 +37,7 @@ interface IState {
   techSalaries: ISalary[];
   salariesFilter: (d: any) => boolean;
   countyNames: ICountyName[]; // name, id
-  USstateNames: object[],
+  USstateNames: IStateName[],
   usTopoJson: topojson.UsAtlas | null,
   filteredBy: IFilter,
 };

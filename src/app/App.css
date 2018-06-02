@@ -43,3 +43,10 @@ button {
   stroke: grey;
   stroke-width: 1px;
 }
+
+/* Map Styles */
+path.stateBorder {
+  fill: none;
+  stroke: #fff;
+  stroke-linejoin: 'round';
+}

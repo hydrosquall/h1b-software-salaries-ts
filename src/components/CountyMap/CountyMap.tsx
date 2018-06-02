@@ -3,7 +3,7 @@ import _ from "lodash";
 import React, { Component } from "react";
 import * as topojson from "topojson";
 
-import { ICountyValue } from '../../interfaces';
+import { ICountyValue, IStateName } from '../../interfaces';
 import County from "./County";
 
 interface IProps { // Reflect: better than React proptypes?
@@ -14,7 +14,7 @@ interface IProps { // Reflect: better than React proptypes?
   readonly x: number;
   readonly y: number;
   readonly zoom: string | null; // bool?
-  readonly USstateNames: object[];
+  readonly USstateNames: IStateName[];
 };
 
 const initialState = {
@@ -59,12 +59,6 @@ class CountyMap extends Component<IProps, State> {
           .map((d: ICountyValue) => [d.countyID, d.value])
       );
 
-      const borderStyle = {
-        fill: 'none',
-        stroke: '#fff',
-        strokeLinejoin: 'round'
-      };
-
       return (
       <g transform={`translate(${this.props.x}, ${this.props.y})`}>
         {counties.map((feature) => (
@@ -78,11 +72,7 @@ class CountyMap extends Component<IProps, State> {
         ))}
         {/* State Borders*/}
         <path d={this.geoPath(statesMesh) as string}
-              style={{
-                fill: 'none',
-                stroke: '#fff',
-                strokeLinejoin: 'round'
-              }}
+              className='stateBorder'
         />
         </g>
       );
@@ -95,7 +85,24 @@ class CountyMap extends Component<IProps, State> {
       .translate([props.width / 2, props.height / 2])
       .scale(props.width * 1.3);
 
-    // TODO: Add some code for zooming
+    if (props.zoom && props.usTopoJson) {
+        const us = props.usTopoJson;
+        const statePaths = topojson.feature(us, us.objects.states).features;
+        const { id } = _.find(props.USstateNames, { code: props.zoom }) as IStateName;
+
+      this.projection.scale(props.width * 4.5);
+
+      const centroidId = _.find(statePaths, { id: id as string });
+      if (centroidId) {
+        const centroid = this.geoPath.centroid(centroidId);
+        const translate = this.projection.translate();
+
+        this.projection.translate([
+          translate[0] - centroid[0] + props.width / 2,
+          translate[1] - centroid[1] + props.height / 2
+        ]);
+      }
+    }
 
     // Adjust domain to avoid the skew from outliers... note these are magic numbers.
     const values = this.props.countyValues;
