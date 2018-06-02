@@ -1,3 +1,9 @@
+### 0.7.0 2018-06-02
+
+- Set up testing with `cypress.io` / `jest` [#4](https://github.com/hydrosquall/h1b-software-salaries-ts/pull/4)
+- Run Tests on Travis [#5](https://github.com/hydrosquall/h1b-software-salaries-ts/pull/5)
+- Deploy to GH-Pages on merge to Master [#6](https://github.com/hydrosquall/h1b-software-salaries-ts/pull/6)
+
 ### 0.6.0 2018-06-02
 
 - Add zoom-on-filter capabilities[#2](https://github.com/hydrosquall/h1b-software-salaries-ts/pull/2)

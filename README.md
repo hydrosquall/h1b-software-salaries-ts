@@ -7,15 +7,17 @@ This project is a variation on Swizec Teller's demo from a lesson for a React/D3
 - [x] Using Typescript 2.8
 - [x] Using React 16.4 (making use of CreateRef API)
 - [x] Refining various "exercise for reader" items from the original application that were not covered in the original text.
-- [x] Host application on github-pages
+- [x] Host application on github-pages, and deploy on merge to master
+- [x] Write some tests with Enzyme + Jest
+- [x] Using `cypress.io` for e2e testing
+- [x] CI with Travis for JS application
+
+
 
 Other things I'd like to implement going forward:
 
 - [ ] Use Redux to centralize data filtering logic
-- [ ] Write some tests with Enzyme + Jest
 - [ ] Swap in D3 v5 in place of v4 (d3.queue deprecated in favor of Promises API).
-- [ ] Using `cypress.io` for e2e testing
-- [ ] CI with Travis for JS application
 - [ ] Further Redux concepts from Dan Abramov's video course
 - [ ] Swap in components from Material-UI / Semiotic
 
